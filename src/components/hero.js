@@ -20,10 +20,8 @@ export default function Hero(props) {
         <Flex gap={4} variant="responsive">
           <Box width="half">
             {props.image && (
-              <GatsbyImage
-                alt={props.image.alt}
-                image={getImage(props.image.gatsbyImageData)}
-              />
+              <object type="image/svg+xml" data={props.image.url} fill="currentColor">
+              </object>
             )}
           </Box>
           <Box width="half">
@@ -55,7 +53,7 @@ export const query = graphql`
     }
     image {
       id
-      gatsbyImageData
+      url
       alt
     }
   }

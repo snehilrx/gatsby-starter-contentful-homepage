@@ -10,12 +10,29 @@ export const media = {
   large: `screen and (min-width: ${breakpoints[2]})`,
 }
 
+
+
+export const wrapBox = style({
+  position: "relative",
+  ":before": {
+    content: "",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    height: "100%",
+    width: "100%",
+    background: "rgba(0,0,0,0.5)",
+    zIndex: 999
+  }
+})
+
 export const container = style({
   maxWidth: theme.sizes.container,
   marginLeft: "auto",
   marginRight: "auto",
   paddingLeft: theme.space[4],
   paddingRight: theme.space[4],
+  scrollSnapAlign: "center" 
 })
 
 export type Containers = "normal" | "wide" | "narrow" | "tight" | "fullbleed"

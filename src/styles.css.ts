@@ -10,6 +10,10 @@ globalStyle("body", {
   MozOsxFontSmoothing: "grayscale",
 })
 
+globalStyle("html", {
+  scrollSnapType: "y mandatory"
+})
+
 globalStyle("*", {
   boxSizing: "border-box",
 })

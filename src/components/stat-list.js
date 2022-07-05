@@ -1,10 +1,8 @@
-import * as React from "react"
+import React, { Component } from 'react'
 import { graphql } from "gatsby"
-import { GatsbyImage, getImage } from "gatsby-plugin-image"
 import {
   Container,
   Section,
-  FlexList,
   Text,
   Kicker,
   Heading,
@@ -12,56 +10,86 @@ import {
   Box,
   Icon,
   ButtonList,
+  cx,
   Nudge,
+  Button,
+  VisuallyHidden,
 } from "./ui"
+import * as styles from "./ui.css"
 
-function Stat(props) {
-  return (
-    <Box>
-      <Text variant="stat">{props.value}</Text>
-      <Text variant="statLabel">{props.label}</Text>
-    </Box>
-  )
+function Hidden(props) {
+  return !props.visible ? <div style={{ visibility: "hidden" }}>{props.children}</div> : props.children;
 }
 
-export default function StatList(props) {
-  return (
-    <Container width="fullbleed">
-      <Section padding={5} radius="large" background="primary">
-        <Flex responsive variant="end">
-          <Box width="half">
-            {props.icon && (
-              <Icon alt={props.icon.alt} image={props.icon.gatsbyImageData} />
-            )}
-            <Heading>
-              {props.kicker && <Kicker>{props.kicker}</Kicker>}
-              {props.heading}
-            </Heading>
-            {props.text && <Text variant="lead">{props.text}</Text>}
-            <FlexList wrap gap={4}>
-              {props.content.map((stat) => (
-                <li key={stat.id}>
-                  <Stat {...stat} />
-                </li>
-              ))}
-            </FlexList>
-            <ButtonList links={props.links} reversed />
-          </Box>
-          <Box width="half">
-            {props.image && (
-              <Nudge right={5} bottom={5}>
-                <GatsbyImage
-                  alt={props.image.alt}
-                  image={getImage(props.image.gatsbyImageData)}
-                />
-              </Nudge>
-            )}
-          </Box>
-        </Flex>
-      </Section>
-    </Container>
-  )
+export default class StatList extends Component {
+
+  state = {
+    isVisible: true
+  }
+
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
+    const { props } = this;
+    return (
+      <Container width="fullbleed" margin={5} style={{ position: "relative" }}>
+        <div style={{
+          width: "100%",
+          padding: "0 32px",
+          inset: 0,
+          position: "absolute",
+          zIndex: "-1",
+          height: "100%"
+        }}>
+          <video id="vid" style={{
+            width: "100%",
+            borderRadius: "var(--radii-large__wuwu9p1g)"
+          }}>
+            <source src={props.image.url} type="video/mp4" />
+          </video>
+          <audio id="aud" src={props.icon.url} />
+        </div>
+        <Section padding={3} radius="large"  >
+          <Flex responsive variant="end">
+            <Nudge top={-6} left={-6}>
+              <Hidden visible={this.state.isVisible}>
+                <Box width="half" style={{ color: "var(--colors-muted__wuwu9p3)" }}>
+                  <Heading>
+                    {props.kicker && <Kicker>{props.kicker}</Kicker>}
+                    {props.heading}
+                  </Heading>
+                  {props.text && <Text variant="lead">{props.text}</Text>}
+                  <ButtonList links={props.links} reversed />
+                  <Button variant={"reversed"} onClick={(e) => {
+                    e.preventDefault(); document.getElementById("vid").play();
+                    document.getElementById("aud").play();
+                    this.setState({ isVisible: false })
+                  }}>PLAY</Button>
+                </Box>
+              </Hidden>
+              <Hidden visible={!this.state.isVisible}>
+                <Button variant={"reversed"} onClick={(e) => {
+                  e.preventDefault(); 
+                  var video = document.getElementById("vid");
+                  var audio = document.getElementById("aud");
+                  video.pause();
+                  video.currentTime = 0;
+                  audio.pause();
+                  audio.currentTime = 0;
+                  this.setState({ isVisible: true })
+                }}>STOP</Button>
+              </Hidden>
+            </Nudge>
+          </Flex>
+        </Section>
+      </Container >
+    )
+  }
 }
+
+
 
 export const query = graphql`
   fragment HomepageStatListContent on HomepageStatList {
@@ -70,14 +98,10 @@ export const query = graphql`
     heading
     text
     image {
-      id
-      alt
-      gatsbyImageData
+      url
     }
     icon {
-      id
-      alt
-      gatsbyImageData
+      url
     }
     content {
       id

@@ -11,6 +11,8 @@ import {
   InteractiveIcon,
   Nudge,
   VisuallyHidden,
+  Heading,
+  Subhead,
 } from "./ui"
 import {
   mobileNavOverlay,
@@ -79,24 +81,10 @@ export default function Header() {
             <VisuallyHidden>Home</VisuallyHidden>
             <BrandLogo />
           </NavLink>
-          <nav>
-            <FlexList gap={4}>
-              {navItems &&
-                navItems.map((navItem) => (
-                  <li key={navItem.id}>
-                    {navItem.navItemType === "Group" ? (
-                      <NavItemGroup
-                        name={navItem.name}
-                        navItems={navItem.navItems}
-                      />
-                    ) : (
-                      <NavLink to={navItem.href}>{navItem.text}</NavLink>
-                    )}
-                  </li>
-                ))}
-            </FlexList>
-          </nav>
-          <div>{cta && <Button to={cta.href}>{cta.text}</Button>}</div>
+          <Heading>Major Project<br/><Subhead>Identifying Illegal fishing using machine learning</Subhead></Heading>
+          <Button to={"/about"} variant={isOpen ? "reversed" : "primary"}>
+            {"Team"}
+          </Button>
         </Flex>
       </Container>
       <Container className={mobileHeaderNavWrapper[isOpen ? "open" : "closed"]}>
@@ -115,48 +103,14 @@ export default function Header() {
           <Flex>
             <Space />
             <div>
-              {cta && (
-                <Button to={cta.href} variant={isOpen ? "reversed" : "primary"}>
-                  {cta.text}
-                </Button>
-              )}
+              <Button to={"/about"} variant={isOpen ? "reversed" : "primary"}>
+                {"Team"}
+              </Button>
             </div>
-            <Nudge right={3}>
-              <InteractiveIcon
-                title="Toggle menu"
-                onClick={() => setOpen(!isOpen)}
-                className={
-                  mobileNavSVGColorWrapper[isOpen ? "reversed" : "primary"]
-                }
-              >
-                {isOpen ? <X /> : <Menu />}
-              </InteractiveIcon>
-            </Nudge>
           </Flex>
         </Flex>
       </Container>
-      {isOpen && (
-        <div className={mobileNavOverlay}>
-          <nav>
-            <FlexList responsive variant="stretch">
-              {navItems?.map((navItem) => (
-                <li key={navItem.id}>
-                  {navItem.navItemType === "Group" ? (
-                    <NavItemGroup
-                      name={navItem.name}
-                      navItems={navItem.navItems}
-                    />
-                  ) : (
-                    <NavLink to={navItem.href} className={mobileNavLink}>
-                      {navItem.text}
-                    </NavLink>
-                  )}
-                </li>
-              ))}
-            </FlexList>
-          </nav>
-        </div>
-      )}
+
     </header>
   )
 }

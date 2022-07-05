@@ -2,6 +2,7 @@ import { Link as GatsbyLink } from "gatsby"
 import { GatsbyImage, getImage } from "gatsby-plugin-image"
 import isAbsoluteURL from "is-absolute-url"
 import * as React from "react"
+import createScrollSnap from "scroll-snap"
 import * as styles from "./ui.css"
 
 export const cx = (...args) => args.filter(Boolean).join(" ")
@@ -16,7 +17,8 @@ export function Base({
 }
 
 export function Container({ width = "normal", ...props }) {
-  return <Base cx={[styles.containers[width]]} {...props} />
+
+  return <Base cx={[styles.containers[width]]} {...props}/>
 }
 
 export function Flex({
